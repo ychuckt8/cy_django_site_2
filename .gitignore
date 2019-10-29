@@ -4,3 +4,5 @@ mysite/__pycache__/
 blog/__pycache__/
 *.pyc
 *.DS_Store
+urls.cpython-37.pyc
+views.cpython-37.pyc
