@@ -1,8 +1,10 @@
+from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 
-from blog.forms import PostForm, CommentForm
+from blog.forms import PostForm, CommentForm, UserForm
 from blog.models import Post, Comment
 
 
@@ -102,3 +104,16 @@ def comment_approve (request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     comment.approve()
     return redirect('post_detail', pk=comment.post.pk)
+
+
+def signup(request):
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        if form.is_valid():
+            new_user = User.objects.create_user(**form.cleaned_data)
+            login(request, new_user)
+            return redirect('/')
+    else:
+        form = UserForm()
+        stuff_for_frontend = {'form': form}
+    return render(request, 'blog/signup.html', {'form': form})
